@@ -5,3 +5,4 @@ for i in range(50):
     t.colormode(255)
     t.color(i * 3, i * 3, 80 + i * 2)
     t.circle(i)
+    p
