@@ -19,6 +19,11 @@ def update_base_label(event):
     name = currencies[code]
     base_label.config(text=name)
 
+def update_base_label2(event):
+    code = base_combobox2.get()
+    name = currencies[code]
+    base_label2.config(text=name)
+
 
 def exchange():
     target_code = target_combobox.get().strip()
