@@ -6,7 +6,20 @@ import json
 import pprint
 
 
-currencies = {
+def update_base_label(event):
+    code = base_combobox.get()
+    name = crypto[code]
+    base_label.config(text=name)
+
+
+def update_currency_label(event):
+    code = target_combobox.get()
+
+    name = crypto[code]
+    target_label.config(text=name)
+
+
+crypto = {
     'BTC': 'Bitcoin',
     'ETH': 'Ethereum',
     'USDT': 'Tether',
@@ -26,7 +39,7 @@ root.title('Курс обмена криптовалют')
 root.geometry('360x180')
 
 Label(root, text='Базовая криптовалюта').pack()
-base_combobox = ttk.Combobox(root, values=list(currencies.keys()))
+base_combobox = ttk.Combobox(root, values=list(crypto.keys()))
 base_combobox.pack(pady=3, padx=10)
 base_combobox.bind('<<ComboboxSelected>>', update_base_label)
 base_label = ttk.Label()
@@ -34,7 +47,7 @@ base_label.pack()
 
 Label(root, text='Целевая криптовалюта' ).pack(padx=10)
 
-target_combobox = ttk.Combobox(root, values=list(currencies.keys()))
+target_combobox = ttk.Combobox(root, values=list(crypto.keys()))
 target_combobox.pack(pady=3, padx=10)
 target_combobox.bind('<<ComboboxSelected>>', update_currency_label)
 
