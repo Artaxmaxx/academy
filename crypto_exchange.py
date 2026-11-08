@@ -12,48 +12,53 @@ def update_base_label(event):
     base_label.config(text=name)
 
 
-def update_currency_label(event):
-    code = target_combobox.get()
+def exchange():
+    base_code = base_combobox.get().strip()
+    if base_code:
+        try:
+            response = requests.get(f'https://api.coingecko.com/api/v3/simple/price?ids={base_code}&vs_currencies=usd')
+            response.raise_for_status()
+            data = response.json()
+            if data:
+                base = crypto[base_code]
+                mb.showinfo('Курс обмена',
+                            f'Курс: {data[base_code]["usd"]} долларов США за 1 {base}')
+            else:
+                mb.showerror('Ошибка',
+                            f'Криптовалюта {base_code} не найдена')
+        except Exception as er:
+            mb.showerror('Ошибка', er)
 
-    name = crypto[code]
-    target_label.config(text=name)
+    else:
+        mb.showwarning('Внимание', 'Введите код криптовалюты')
 
 
 crypto = {
-    'BTC': 'Bitcoin',
-    'ETH': 'Ethereum',
-    'USDT': 'Tether',
-    'BNB': 'BNB',
-    'XRP': 'XRP',
-    'USDC': 'USDC',
-    'SOL': 'Solana',
-    'TRX': 'TRON',
-    'ZEC': 'Zcash',
-    'HYPE': 'Hyperliquid',
-    'XMR': 'Monero'
-
+    'bitcoin': 'Bitcoin',
+    'ethereum': 'Ethereum',
+    'tether': 'Tether',
+    'binancecoin': 'BNB',
+    'ripple': 'XRP',
+    'usd-coin': 'USDC',
+    'solana': 'Solana',
+    'tron': 'TRON',
+    'zcash': 'Zcash',
+    'hyperliquid': 'Hyperliquid',
+    'monero': 'Monero'
 }
 
 root = Tk()
 root.title('Курс обмена криптовалют')
-root.geometry('360x180')
+root.geometry('360x120')
 
-Label(root, text='Базовая криптовалюта').pack()
+Label(root, text='Выберите криптовалюту').pack()
+
 base_combobox = ttk.Combobox(root, values=list(crypto.keys()))
 base_combobox.pack(pady=3, padx=10)
 base_combobox.bind('<<ComboboxSelected>>', update_base_label)
+
 base_label = ttk.Label()
 base_label.pack()
-
-Label(root, text='Целевая криптовалюта' ).pack(padx=10)
-
-target_combobox = ttk.Combobox(root, values=list(crypto.keys()))
-target_combobox.pack(pady=3, padx=10)
-target_combobox.bind('<<ComboboxSelected>>', update_currency_label)
-
-target_label = ttk.Label()
-target_label.pack()
-
 
 Button(text='Получить курс обмена',
        command=exchange).pack(pady=10, padx=10)
